@@ -1,31 +1,31 @@
 pipeline {
     agent any
-    triggers {
-        githubPush()
-    }
+
     stages {
         stage('Checkout') {
             steps {
-                checkout scm
+                // Checkout code from GitHub
+                git branch: 'main', url: 'https://github.com/sparshk380/Jenkins'
             }
         }
-        stage('Build') {
+
+        stage('Display Python File Content') {
             steps {
-                sh 'echo Building...'
-                // Add your build commands here
+                script {
+                    // List the files in the repository
+                    sh 'ls -l'
+
+                    // Display the content of the Python file
+                    sh 'cat your_python_file.py'
+                }
             }
         }
-        stage('Test') {
-            steps {
-                sh 'echo Testing...'
-                // Add your test commands here
-            }
-        }
-        stage('Deploy') {
-            steps {
-                sh 'echo Deploying...'
-                // Add your deployment commands here
-            }
+    }
+
+    post {
+        always {
+            // Archive artifacts if needed
+            archiveArtifacts artifacts: '**/*.py', allowEmptyArchive: true
         }
     }
 }
