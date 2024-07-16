@@ -4,6 +4,7 @@ pipeline {
         githubPush()
     }
     wewefw
+    sdvidf
     stages {
         stage('Run Python Script') {
             steps {
