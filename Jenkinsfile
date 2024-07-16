@@ -3,7 +3,7 @@ pipeline {
     triggers {
         githubPush()
     }
-    wefn
+
     stages {
         stage('Run Python Script') {
             steps {
