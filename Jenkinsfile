@@ -3,12 +3,45 @@ pipeline {
     triggers {
         githubPush()
     }
+
+    environment {
+        GITHUB_TOKEN = credentials('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')
+    }
+
     stages {
-        stage('Run Python Script') {
+        stage('Run Script') {
             steps {
                 script {
-                    def output = sh(script: 'python3 main.py', returnStdout: true).trim()
-                    echo output
+                    try {
+                        sh 'python3 main.py'
+                        currentBuild.result = 'SUCCESS'
+                    } catch (Exception e) {
+                        currentBuild.result = 'FAILURE'
+                        throw e
+                    }
+                }
+            }
+        }
+    }
+    
+    post {
+        always {
+            script {
+                def repoUrl = "https://api.github.com/repos/sparshk380/Jenkins/statuses/${env.GIT_COMMIT}"
+                def status = currentBuild.result == 'SUCCESS' ? 'success' : 'failure'
+                
+                withCredentials([string(credentialsId: 'your-github-token-id', variable: 'GITHUB_TOKEN')]) {
+                    sh """
+                        curl -H "Authorization: token $GITHUB_TOKEN" \
+                             -H "Content-Type: application/json" \
+                             -d '{
+                                 "state": "${status}",
+                                 "target_url": "${env.BUILD_URL}",
+                                 "description": "Jenkins Build ${status}",
+                                 "context": "jenkins-ci"
+                             }' \
+                             ${repoUrl}
+                    """
                 }
             }
         }
