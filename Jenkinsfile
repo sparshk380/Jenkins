@@ -3,8 +3,7 @@ pipeline {
     triggers {
         githubPush()
     }
-    wewefw
-    sdvidf
+
     stages {
         stage('Run Python Script') {
             steps {
