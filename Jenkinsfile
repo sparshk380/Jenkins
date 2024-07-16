@@ -21,6 +21,14 @@ pipeline {
                 // Add your test commands here
             }
         }
+        stage('Run Python Script') {
+            steps {
+                script {
+                    def output = sh(script: 'python3 main.py', returnStdout: true).trim()
+                    echo output
+                }
+            }
+        }
         stage('Deploy') {
             steps {
                 sh 'echo Deploying...'
