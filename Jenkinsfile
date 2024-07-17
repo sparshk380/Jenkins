@@ -3,7 +3,7 @@ pipeline {
     triggers {
         githubPush()
     }
-
+efj
     environment {
         GITHUB_TOKEN = credentials('github-token')
     }
