@@ -5,7 +5,7 @@ pipeline {
     }
 
     environment {
-        GITHUB_TOKEN = credentials('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')
+        GITHUB_TOKEN = credentials('github-token')
     }
 
     stages {
